@@ -40,7 +40,7 @@ public class GridController : MonoBehaviour
     {
         // y = coordStart.y + (coords.y + 1/2) * spacing;
         // (y - coordStart.y)/spacing = coords.y + 1/2
-        return Mathf.CeilToInt((y - instance.coordStart.y)/instance.spacing - 1/2);
+        return Mathf.FloorToInt((y - instance.coordStart.y)/instance.spacing - 1/2);
     }
 
     public static Vector3 gridToSpaced(Vector3Int coords)
@@ -64,5 +64,16 @@ public class GridController : MonoBehaviour
     public void FilledRowAction(Row row)
     {
         Debug.Log("filled");
+    }
+
+    public static void FillTileSpace(Tile tile)
+    {
+        foreach(TileSegment segment in tile.segments)
+        {
+            Vector3Int position = tile.centerGridPosition + segment.localPosition;
+            if(position.y >= 0 && position.y < instance.size.y)
+                instance.rows[position.y].Fill(position.x, position.z);
+        }
+
     }
 }

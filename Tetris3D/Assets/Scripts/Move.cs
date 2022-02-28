@@ -4,52 +4,68 @@ using UnityEngine;
 
 public class Move
 {
-    private bool rotate;
-    private bool flip;
-    private bool fastFall;
-    private int Xtransl;
-    private int Ztransl;
+    Tile tile;
+    private bool rotate = false;
+    private bool flip = false;
+    private bool fastFall = false;
+    private int Xtransl = 0;
+    private int Ztransl = 0;
 
-    private Move(bool r, bool f, bool q, int x, int z)
+    public bool horizontal { private set; get; }
+    public bool verticalOnGrid { private set; get; }
+    private bool vertical;
+
+    public Move(Tile t)
     {
-        rotate = r;
-        flip = f;
-        fastFall = q;
-        Xtransl = x;
-        Ztransl = z;
+        tile = t;
+
+        float y = tile.transform.position.y;
+        y -= Movement.instance.fallingSpeed * Time.deltaTime;
+        verticalOnGrid =  GridController.worldSpaceYToGrid(y) < tile.centerGridPosition.y;
+
+        horizontal = false;
+        vertical = true;
     }
 
-    public Move() : this(false, false, false, 0, 0) {}
-
     public void AddRotatation()
-    { rotate = true; }
+    { 
+        rotate = horizontal = true;
+    }
 
     public void AddFlip()
-    { flip = true; }
+    { 
+        flip = horizontal = true; 
+    }
 
     public void FastFall()
-    { fastFall = true; }
+    { 
+        fastFall = true; 
+
+        float y = tile.transform.position.y;
+        y -= Movement.instance.fastFallingSpeed * Time.deltaTime;
+        verticalOnGrid =  GridController.worldSpaceYToGrid(y) < tile.centerGridPosition.y;
+    }
 
     public void Add(int x, int z)
     {
         Xtransl += x;
         Ztransl += z;
+        horizontal = true;
     }
 
-    public bool IsIdentity()
+    public void ClearHorizontalMovement()
     {
-        return Xtransl == 0 && Ztransl == 0 && !rotate && !flip;
+        horizontal = false;
+    }
+
+    public void ClearVerticalMovement()
+    {
+        vertical = false;
     }
 
     public bool isTranslation()
     {
         return Xtransl != 0 || Ztransl != 0;
-    }
-    public void ClearGridMovement()
-    {
-        rotate = false;
-        flip = false;
-        ClearTranslation();
     }
 
     public void ClearTranslation()
@@ -57,68 +73,79 @@ public class Move
         Xtransl = 0;
         Ztransl = 0;
     }
-
-    public Vector3Int TranslatedOnGrid(Vector3Int vector)
-    {
-        return vector + new Vector3Int(Xtransl, 0, Ztransl);
-    }
     
-    public Vector3Int[] movedGridPositions(Tile tile)
+    //zwraca null gdy pozycje się nie zmieniają
+    public Vector3Int[] movedGridPositions(bool includeVerticalMovement)
     {
+        if(!horizontal && !(vertical && includeVerticalMovement && verticalOnGrid))
+            return null;
+
         Vector3Int center = tile.centerGridPosition;
-        Vector3Int translation = GetGridTranslation(tile);
+        Vector3Int translation = Vector3Int.zero;
+
         Vector3Int[] positions = new Vector3Int[4];
-        Vector3Int localPosition;
-
         for(int i = 0; i<4; ++i)
+            positions[i] = tile.segments[i].localPosition;
+        
+        if(horizontal)
         {
-            localPosition = tile.segments[i].localPosition;
-
+            translation.x = Xtransl;
+            translation.z = Ztransl;
+            
             if(flip)
-                localPosition = Flip(localPosition);
+                for(int i = 0; i<4; ++i)
+                    positions[i] = Flip(positions[i]);
             
             if(rotate)
-                localPosition = Rotate(localPosition);
+                for(int i = 0; i<4; ++i) 
+                    positions[i] = Rotate(positions[i]);
+        } 
 
-            positions[i] = center + localPosition + translation;
-        }
+        if(vertical && includeVerticalMovement && verticalOnGrid)
+                translation.y--;
+
+        for(int i = 0; i<4; ++i) 
+            positions[i] += center + translation;
 
         return positions;
     }
 
-    private Vector3Int GetGridTranslation(Tile tile) 
+    public void Apply()
     {
-        Vector3Int translation = new Vector3Int(Xtransl, 0, Ztransl);
+        if(!horizontal && !vertical)
+            return;
 
-        float y = tile.transform.position.y;
-        y -= (fastFall ? Movement.instance.fastFallingSpeed : Movement.instance.fallingSpeed) * Time.deltaTime;
+        Vector3Int gridTranslation = Vector3Int.zero;
 
-        if(GridController.worldSpaceYToGrid(y) < tile.centerGridPosition.y)
-            translation.y--;
-        
-        return translation;
-    }
+        if(horizontal)
+        {
+            gridTranslation.x = Xtransl;
+            gridTranslation.z = Ztransl;
 
-    public void Apply(Tile tile)
-    {
-        Vector3Int gridTranslation = GetGridTranslation(tile);
+            if(rotate)
+            {
+                foreach(TileSegment segment in tile.segments)
+                    segment.UpdatePosition( Rotate(segment.localPosition) );
+            }
+
+            if(flip)
+            {
+                foreach(TileSegment segment in tile.segments)
+                    segment.UpdatePosition( Flip(segment.localPosition) );
+            } 
+        }
+
+        if(vertical && verticalOnGrid)
+            gridTranslation.y = -1;
+
         tile.centerGridPosition += gridTranslation;
 
         Vector3 tileTranslation = GridController.gridToSpaced(gridTranslation);
-        tileTranslation.y = -(fastFall ? Movement.instance.fastFallingSpeed : Movement.instance.fallingSpeed) * Time.deltaTime;
+
+        if(vertical)
+            tileTranslation.y = -(fastFall ? Movement.instance.fastFallingSpeed : Movement.instance.fallingSpeed) * Time.deltaTime;
+
         tile.transform.Translate(tileTranslation);
-
-        if(rotate)
-        {
-            foreach(TileSegment segment in tile.segments)
-                segment.UpdatePosition( Rotate(segment.localPosition) );
-        }
-
-        if(flip)
-        {
-            foreach(TileSegment segment in tile.segments)
-                segment.UpdatePosition( Flip(segment.localPosition) );
-        }
     }
 
     private static Vector3Int Rotate(Vector3Int vector)

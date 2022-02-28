@@ -16,22 +16,23 @@ public class TileController : MonoBehaviour
 
     private Tile currentTile = null;
 
-    private void Awake() 
+    private void Start() 
     {
         if(instance == null)
             instance = this;
 
-        timer = timeInterval;
+        //timer = timeInterval;
+        SpawnShape();
     }
 
     private void Update()
     {   
-        timer += Time.deltaTime;
-        if(timer > timeInterval)
-        {
-            SpawnShape();
-            timer = 0;
-        }
+        // timer += Time.deltaTime;
+        // if(timer > timeInterval)
+        // {
+        //     SpawnShape();
+        //     timer = 0;
+        // }
     }
     
     private void SpawnShape()
@@ -45,9 +46,13 @@ public class TileController : MonoBehaviour
 
         tile.ChangeColor(color);
 
-        if(currentTile != null)
-            currentTile.Deactivate();
-        
         currentTile = tile;
+    }
+
+    public static void TileLanded()
+    {
+        GridController.FillTileSpace(instance.currentTile);
+        instance.currentTile.Deactivate();
+        instance.SpawnShape();
     }
 }

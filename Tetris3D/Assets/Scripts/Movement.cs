@@ -25,34 +25,54 @@ public class Movement : MonoBehaviour
         timer += Time.deltaTime;
     }
 
-    public static void TryToMove(Move move, Tile tile) 
+    public static void TryToMove(Move move) 
     {
-        instance._TryToMove(move, tile);
+        instance.CheckPossibleMovement(move);
+        move.Apply();
     }
 
-    private void _TryToMove(Move move, Tile tile)
+    private void CheckPossibleMovement(Move move)
     {
-        CheckGridMovement(move, tile);
-        move.Apply(tile);
+        if(!CanMoveHorizontally(move))
+            move.ClearHorizontalMovement();
+        
+        if(!CanMoveVertically(move))
+        {
+            move.ClearVerticalMovement();
+            move.Apply();
+            TileController.TileLanded();
+            return;
+        }
     }
 
-    private void CheckGridMovement(Move move, Tile tile) 
+    private bool CanMoveHorizontally(Move move) 
     {
+        if(!move.horizontal)
+           return true;
+
         if(move.isTranslation())
         {
             if(timer >= minTimeBetweenMoves)
                 timer = 0;
             else
-                move.ClearTranslation();
+                return false;
         }
 
-        if(!FitsInGrid(move, tile))
-            move.ClearGridMovement();
+        return FitsInGrid(move, false);
     }
 
-    private bool FitsInGrid(Move move, Tile tile) 
+    private bool CanMoveVertically(Move move)
     {
-        Vector3Int[] movedPositions = move.movedGridPositions(tile);
+        return !move.verticalOnGrid || FitsInGrid(move, true);
+    }
+
+    private bool FitsInGrid(Move move, bool includeVertical) 
+    {
+        Vector3Int[] movedPositions = move.movedGridPositions(includeVertical);
+
+        if(movedPositions == null)
+            return true;
+
         foreach(Vector3Int pos in movedPositions)
         {
             if(!GridController.IsInsideHorizontally(pos) || GridController.IsColliding(pos))

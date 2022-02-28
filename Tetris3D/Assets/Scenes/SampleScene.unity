@@ -340,7 +340,7 @@ MonoBehaviour:
   - {r: 0.9, g: 0.9, b: 0.09000002, a: 1}
   - {r: 0.09000002, g: 0.9, b: 0.9, a: 1}
   - {r: 0.9, g: 0.09000002, b: 0.9, a: 1}
-  timeInterval: 3
+  timeInterval: 10
 --- !u!4 &583914757
 Transform:
   m_ObjectHideFlags: 0

@@ -23,7 +23,7 @@ public class Tile : MonoBehaviour
 
     private void handleMovement()
     {
-        Move gridMovement = new Move();
+        Move gridMovement = new Move(this);
 
         if(Input.GetKey(KeyCode.UpArrow))   
             gridMovement.Add(0, 1);
@@ -46,7 +46,7 @@ public class Tile : MonoBehaviour
         if(Input.GetKey(KeyCode.Space))
             gridMovement.FastFall();
 
-        Movement.TryToMove(gridMovement, this);
+        Movement.TryToMove(gridMovement);
     }
 
     public void ChangeColor(Color c)
