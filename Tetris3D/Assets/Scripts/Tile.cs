@@ -64,12 +64,4 @@ public class Tile : MonoBehaviour
     {
         Destroy(this);
     }
-
-    // debug
-    private void OnDrawGizmos() 
-    {
-        Gizmos.color = Color.black;
-        foreach(TileSegment s in segments)
-            Gizmos.DrawCube(GridController.gridToWorldSpace(centerGridPosition + s.localPosition), Vector3.one * GridController.instance.spacing);    
-    } 
 }

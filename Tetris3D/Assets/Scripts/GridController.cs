@@ -8,9 +8,10 @@ public class GridController : MonoBehaviour
     public float spacing;
     public GameObject linePrefab;
     
+    public static GridController instance;
     [HideInInspector]
     public Vector3Int topCenter;
-    public static GridController instance;
+    [HideInInspector]
     public Vector3 coordStart;
 
     private Row[] rows;
@@ -78,5 +79,13 @@ public class GridController : MonoBehaviour
                 instance.rows[position.y].Fill(position.x, position.z, segment.transform);
         }
 
+    }
+
+    private void OnDrawGizmos()
+    {
+        #if UNITY_EDITOR
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position, (Vector3)size*spacing);
+        #endif
     }
 }
