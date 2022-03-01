@@ -367,7 +367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b0517a678861584698ddbbda24d8263, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fallingSpeed: 5
+  fallingSpeed: 1
   fastFallingSpeed: 10
   minTimeBetweenMoves: 0.1
 --- !u!1 &1504150967
@@ -413,7 +413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca72705d8242bdf40859e5d3ede2f224, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: {x: 10, y: 20, z: 10}
+  size: {x: 4, y: 20, z: 4}
   spacing: 1.1
   linePrefab: {fileID: 3971007180078568811, guid: 100f2904431bb994eae154296d1cc7f9, type: 3}
   topCenter: {x: 0, y: 0, z: 0}

@@ -58,12 +58,15 @@ public class GridController : MonoBehaviour
        if(coords.y >= instance.size.y) 
             return false;
 
-        return coords.y < 0 || instance.rows[coords.y].isFilled[coords.x, coords.z];
+        return coords.y < 0 || instance.rows[coords.y].cells[coords.x, coords.z].isFilled;
     }
 
-    public void FilledRowAction(Row row)
+    public void FilledRowAction(int index)
     {
-        Debug.Log("filled");
+        if(index == size.y - 1)
+            GameManager.GameOver();
+        else
+            Row.Move(rows[index+1], rows[index]);    
     }
 
     public static void FillTileSpace(Tile tile)
@@ -72,7 +75,7 @@ public class GridController : MonoBehaviour
         {
             Vector3Int position = tile.centerGridPosition + segment.localPosition;
             if(position.y >= 0 && position.y < instance.size.y)
-                instance.rows[position.y].Fill(position.x, position.z);
+                instance.rows[position.y].Fill(position.x, position.z, segment.transform);
         }
 
     }
