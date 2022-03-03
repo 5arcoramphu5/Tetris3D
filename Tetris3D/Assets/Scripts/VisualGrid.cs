@@ -13,12 +13,13 @@ public class VisualGrid : MonoBehaviour
     {
         gc = _gc;
 
-        GenerateVerticalGrid(Vector3.right, Vector3.forward, gc.size.x, gc.size.z);
-        GenerateVerticalGrid(Vector3.forward, Vector3.right, gc.size.z, gc.size.x);
+        Transform parent = new GameObject("VisualGrid").transform;
+        GenerateVerticalGrid(Vector3.right, Vector3.forward, gc.size.x, gc.size.z, parent);
+        GenerateVerticalGrid(Vector3.forward, Vector3.right, gc.size.z, gc.size.x, parent);
 
         for(int i = 0; i <= gc.size.y; ++i)
         {
-            LineRenderer lineRend = GameObject.Instantiate(linePrefab, gc.transform).GetComponent<LineRenderer>();
+            LineRenderer lineRend = GameObject.Instantiate(linePrefab, parent).GetComponent<LineRenderer>();
             lineRend.transform.localPosition = gc.coordStart;
             
             Vector3[] positions = new Vector3[4];
@@ -36,7 +37,7 @@ public class VisualGrid : MonoBehaviour
         }
     }
 
-    private void GenerateVerticalGrid(Vector3 direction, Vector3 direction2,  int _size, int _size2)
+    private void GenerateVerticalGrid(Vector3 direction, Vector3 direction2,  int _size, int _size2, Transform parent)
     {
         for(int i = 0; i < _size; ++i)
         {
@@ -44,7 +45,7 @@ public class VisualGrid : MonoBehaviour
 
             for(int j = 0; j<2; ++j)
             {
-                lineRends[j] = GameObject.Instantiate(linePrefab, gc.transform).GetComponent<LineRenderer>();
+                lineRends[j] = GameObject.Instantiate(linePrefab, parent).GetComponent<LineRenderer>();
                 lineRends[j].transform.localPosition = gc.coordStart;
             }
             

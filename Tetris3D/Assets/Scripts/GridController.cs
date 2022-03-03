@@ -6,6 +6,7 @@ public class GridController : MonoBehaviour
 {
     public Vector3Int size;
     public float spacing;
+    public float rowsFallingSpeed;
     
     public static GridController instance;
     [HideInInspector]
@@ -26,10 +27,17 @@ public class GridController : MonoBehaviour
 
         rows = new Row[size.y];
         for(int i = 0; i < size.y; ++i)
-            rows[i] = new Row(this, i);
-        
+            CreateNewRowAtIndex(i);
+
         visualGrid = GetComponent<VisualGrid>();
         visualGrid.CreateGrid(this);
+    }
+
+    private void CreateNewRowAtIndex(int index)
+    {
+        GameObject rowObject = new GameObject("Row");
+        rows[index] = rowObject.AddComponent<Row>();
+        rows[index].Initialize(this, index);
     }
 
     public static Vector3 gridToWorldSpace(Vector3Int coords) 
@@ -62,10 +70,17 @@ public class GridController : MonoBehaviour
         return coords.y < 0 || instance.rows[coords.y].cells[coords.x, coords.z].isFilled;
     }
 
-    public void FilledRowAction(int index)
+    public void DeleteRow(int index)
     {
+        Destroy(rows[index].gameObject);
+
         for(int i = index + 1; i < size.y; i++)
-            Row.Move(rows[i], rows[i-1]);    
+        {
+            rows[i].MoveDown();
+            rows[i-1] = rows[i];
+        } 
+
+        CreateNewRowAtIndex(size.y-1);
     }
 
     public static void FillTileSpace(Tile tile)
@@ -105,16 +120,6 @@ public class GridController : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(transform.position, (Vector3)size*spacing);
-
-        if(rows != null)
-        {
-            Gizmos.color = Color.black;
-            for(int x = 0; x < size.x; ++x)
-                for(int y = 0; y < size.y; ++y)
-                    for(int z = 0; z < size.z; ++z)
-                        if(rows[y].cells[x, z].isFilled)
-                            Gizmos.DrawWireCube(gridToWorldSpace( new Vector3Int(x, y, z)), Vector3.one * spacing);
-        }
     }
     #endif
 }

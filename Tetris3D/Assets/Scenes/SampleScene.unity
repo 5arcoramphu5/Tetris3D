@@ -383,6 +383,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fallingSpeed: 0.5
   fastFallingSpeed: 10
+  smoothRotationSpeed: 5
   minTimeBetweenMoves: 0.1
 --- !u!1 &1504150967
 GameObject:

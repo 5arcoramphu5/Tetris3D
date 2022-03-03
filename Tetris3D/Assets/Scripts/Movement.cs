@@ -12,6 +12,8 @@ public class Movement : MonoBehaviour
 
     public static Movement instance;
     private float timer;
+    [HideInInspector]
+    public bool freezed = false;
 
     private void Awake() 
     {
@@ -28,8 +30,11 @@ public class Movement : MonoBehaviour
 
     public static void TryToMove(Move move) 
     {
-        instance.CheckPossibleMovement(move);
-        move.Apply();
+        if(!instance.freezed)
+        {
+            instance.CheckPossibleMovement(move);
+            move.Apply();
+        }
     }
 
     private void CheckPossibleMovement(Move move)

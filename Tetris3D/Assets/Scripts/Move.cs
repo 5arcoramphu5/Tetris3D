@@ -132,6 +132,8 @@ public class Move
 
     IEnumerator RotateSmoothly()
     {
+        Movement.instance.freezed = true;
+
         Quaternion target = Quaternion.Euler(rotation);
         float t = 0;
         while(t < 1)
@@ -144,6 +146,8 @@ public class Move
         tile.transform.rotation = Quaternion.identity;
         foreach(TileSegment segment in tile.segments)
             segment.UpdatePosition( Rotate(segment.localPosition) );
+
+        Movement.instance.freezed = false;
     }
 
     private Vector3Int Rotate(Vector3Int vector)

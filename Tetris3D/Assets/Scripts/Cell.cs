@@ -17,21 +17,6 @@ public class Cell
     {
         isFilled = true;
         cube = c;
-        cube.transform.position = GridController.gridToWorldSpace(coords);
-    }
-
-    public static void Move(Cell from, Cell to, Vector3Int toCoords)
-    {
-        if(to.cube != null)
-            GameObject.Destroy(to.cube.gameObject);
-            
-        to.isFilled = from.isFilled;
-        to.cube = from.cube;
-
-        if(to.cube != null)
-            to.cube.position = GridController.gridToWorldSpace(toCoords);
-
-        from.isFilled = false;
-        from.cube = null;
+        cube.transform.localPosition = GridController.gridToSpaced(coords);
     }
 }
