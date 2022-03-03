@@ -24,16 +24,15 @@ public class Row
 
     public void Fill(int x, int y, Transform cube)
     {
-        if(cells[x, y].isFilled)
-        {
-            cells[x, y].Fill(cube, new Vector3Int(x, index, y));
-            return;
-        }
+        if(!cells[x, y].isFilled)
+            leftToFill--;
 
         cells[x, y].Fill(cube, new Vector3Int(x, index, y));
-        leftToFill--;
+    }
 
-        if(leftToFill == 0)
+    public void CheckIfFilled()
+    {
+        if(leftToFill <= 0)
             gc.FilledRowAction(index);
     }
 

@@ -394,6 +394,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1504150968}
   - component: {fileID: 1504150969}
+  - component: {fileID: 1504150970}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -427,8 +428,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca72705d8242bdf40859e5d3ede2f224, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: {x: 10, y: 30, z: 10}
+  size: {x: 4, y: 15, z: 4}
   spacing: 1.1
-  linePrefab: {fileID: 3971007180078568811, guid: 100f2904431bb994eae154296d1cc7f9, type: 3}
   topCenter: {x: 0, y: 0, z: 0}
   coordStart: {x: 0, y: 0, z: 0}
+--- !u!114 &1504150970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1504150967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b727148ab90eea34da94f45e16be3e57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  linePrefab: {fileID: 3971007180078568811, guid: 100f2904431bb994eae154296d1cc7f9, type: 3}
+  hightlightPrefab: {fileID: 330441096170281998, guid: bc8576f2dee093f48aa174cc8187e631, type: 3}

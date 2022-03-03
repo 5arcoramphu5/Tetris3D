@@ -22,10 +22,14 @@ public class Cell
 
     public static void Move(Cell from, Cell to, Vector3Int toCoords)
     {
-        GameObject.Destroy(to.cube);
+        if(to.cube != null)
+            GameObject.Destroy(to.cube.gameObject);
+            
         to.isFilled = from.isFilled;
         to.cube = from.cube;
-        to.cube.transform.position = GridController.gridToWorldSpace(toCoords);
+
+        if(to.cube != null)
+            to.cube.position = GridController.gridToWorldSpace(toCoords);
 
         from.isFilled = false;
         from.cube = null;

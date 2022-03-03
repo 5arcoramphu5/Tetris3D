@@ -6,7 +6,6 @@ public class GridController : MonoBehaviour
 {
     public Vector3Int size;
     public float spacing;
-    public GameObject linePrefab;
     
     public static GridController instance;
     [HideInInspector]
@@ -28,8 +27,9 @@ public class GridController : MonoBehaviour
         rows = new Row[size.y];
         for(int i = 0; i < size.y; ++i)
             rows[i] = new Row(this, i);
-
-        visualGrid = new VisualGrid(this);
+        
+        visualGrid = GetComponent<VisualGrid>();
+        visualGrid.CreateGrid(this);
     }
 
     public static Vector3 gridToWorldSpace(Vector3Int coords) 
@@ -67,18 +67,27 @@ public class GridController : MonoBehaviour
         if(index == size.y - 1)
             GameManager.GameOver();
         else
-            Row.Move(rows[index+1], rows[index]);    
+        {
+            for(int i = index + 1; i < size.y; i++)
+                Row.Move(rows[i], rows[i-1]);    
+        }
     }
 
     public static void FillTileSpace(Tile tile)
     {
+        List<int> filledRows = new List<int>();
         foreach(TileSegment segment in tile.segments)
         {
             Vector3Int position = tile.centerGridPosition + segment.localPosition;
             if(position.y >= 0 && position.y < instance.size.y)
+            {
                 instance.rows[position.y].Fill(position.x, position.z, segment.transform);
+                filledRows.Add(position.y);
+            }
         }
 
+        foreach(int index in filledRows)
+            instance.rows[index].CheckIfFilled();
     }
 
     public static Vector3Int RotateRoundToInt(Quaternion rotation, Vector3Int vector)
@@ -98,6 +107,16 @@ public class GridController : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(transform.position, (Vector3)size*spacing);
+
+        if(rows != null)
+        {
+            Gizmos.color = Color.black;
+            for(int x = 0; x < size.x; ++x)
+                for(int y = 0; y < size.y; ++y)
+                    for(int z = 0; z < size.z; ++z)
+                        if(rows[y].cells[x, z].isFilled)
+                            Gizmos.DrawWireCube(gridToWorldSpace( new Vector3Int(x, y, z)), Vector3.one * spacing);
+        }
     }
     #endif
 }

@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VisualGrid
+public class VisualGrid : MonoBehaviour
 {
-    GridController gc;
+    public GameObject linePrefab;
+    public GameObject hightlightPrefab;
 
-    public VisualGrid(GridController _gc)
+    private GridController gc;
+
+    public void CreateGrid(GridController _gc)
     {
         gc = _gc;
 
@@ -15,7 +18,7 @@ public class VisualGrid
 
         for(int i = 0; i <= gc.size.y; ++i)
         {
-            LineRenderer lineRend = GameObject.Instantiate(gc.linePrefab, gc.transform).GetComponent<LineRenderer>();
+            LineRenderer lineRend = GameObject.Instantiate(linePrefab, gc.transform).GetComponent<LineRenderer>();
             lineRend.transform.localPosition = gc.coordStart;
             
             Vector3[] positions = new Vector3[4];
@@ -41,7 +44,7 @@ public class VisualGrid
 
             for(int j = 0; j<2; ++j)
             {
-                lineRends[j] = GameObject.Instantiate(gc.linePrefab, gc.transform).GetComponent<LineRenderer>();
+                lineRends[j] = GameObject.Instantiate(linePrefab, gc.transform).GetComponent<LineRenderer>();
                 lineRends[j].transform.localPosition = gc.coordStart;
             }
             
