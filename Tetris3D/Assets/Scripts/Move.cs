@@ -5,8 +5,7 @@ using UnityEngine;
 public class Move
 {
     Tile tile;
-    private bool rotate = false;
-    private bool flip = false;
+    private Vector3 rotation = Vector3.zero;
     private bool fastFall = false;
     private int Xtransl = 0;
     private int Ztransl = 0;
@@ -27,14 +26,10 @@ public class Move
         vertical = true;
     }
 
-    public void AddRotatation()
+    public void AddRotatation(Vector2Int r)
     { 
-        rotate = horizontal = true;
-    }
-
-    public void AddFlip()
-    { 
-        flip = horizontal = true; 
+        rotation += new Vector3(r.x, 0, r.y) * 90;
+        horizontal = true;
     }
 
     public void FastFall()
@@ -92,11 +87,7 @@ public class Move
             translation.x = Xtransl;
             translation.z = Ztransl;
             
-            if(flip)
-                for(int i = 0; i<4; ++i)
-                    positions[i] = Flip(positions[i]);
-            
-            if(rotate)
+            if(rotation != Vector3.zero)
                 for(int i = 0; i<4; ++i) 
                     positions[i] = Rotate(positions[i]);
         } 
@@ -122,17 +113,11 @@ public class Move
             gridTranslation.x = Xtransl;
             gridTranslation.z = Ztransl;
 
-            if(rotate)
+            if(rotation != Vector3.zero)
             {
                 foreach(TileSegment segment in tile.segments)
                     segment.UpdatePosition( Rotate(segment.localPosition) );
             }
-
-            if(flip)
-            {
-                foreach(TileSegment segment in tile.segments)
-                    segment.UpdatePosition( Flip(segment.localPosition) );
-            } 
         }
 
         if(vertical && verticalOnGrid)
@@ -148,13 +133,8 @@ public class Move
         tile.transform.Translate(tileTranslation);
     }
 
-    private static Vector3Int Rotate(Vector3Int vector)
+    private Vector3Int Rotate(Vector3Int vector)
     {
-        return GridController.RotateRoundToInt(Quaternion.Euler(0, 90, 0), vector);
-    }
-
-    private static Vector3Int Flip(Vector3Int vector)
-    {
-        return new Vector3Int(vector.x, -vector.y, vector.z);
+        return GridController.RotateRoundToInt(Quaternion.Euler(rotation), vector);
     }
 }

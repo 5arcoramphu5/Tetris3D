@@ -38,10 +38,10 @@ public class Tile : MonoBehaviour
             gridMove.Add(-CameraMovement.localRight);
 
         if(Input.GetKeyDown(KeyCode.X))
-            gridMove.AddRotatation();
+            gridMove.AddRotatation(CameraMovement.localRight);
 
         if(Input.GetKeyDown(KeyCode.Z))
-            gridMove.AddFlip();
+            gridMove.AddRotatation(CameraMovement.localForward);
 
         if(Input.GetKey(KeyCode.Space))
             gridMove.FastFall();

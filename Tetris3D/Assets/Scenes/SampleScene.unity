@@ -355,7 +355,6 @@ MonoBehaviour:
   - {r: 0.9, g: 0.9, b: 0.09000002, a: 1}
   - {r: 0.09000002, g: 0.9, b: 0.9, a: 1}
   - {r: 0.9, g: 0.09000002, b: 0.9, a: 1}
-  timeInterval: 10
 --- !u!4 &583914757
 Transform:
   m_ObjectHideFlags: 0
@@ -382,7 +381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b0517a678861584698ddbbda24d8263, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fallingSpeed: 1
+  fallingSpeed: 0.5
   fastFallingSpeed: 10
   minTimeBetweenMoves: 0.1
 --- !u!1 &1504150967
@@ -428,7 +427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca72705d8242bdf40859e5d3ede2f224, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: {x: 10, y: 20, z: 10}
+  size: {x: 10, y: 30, z: 10}
   spacing: 1.1
   linePrefab: {fileID: 3971007180078568811, guid: 100f2904431bb994eae154296d1cc7f9, type: 3}
   topCenter: {x: 0, y: 0, z: 0}
