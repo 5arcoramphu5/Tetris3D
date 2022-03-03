@@ -11,9 +11,6 @@ public class TileController : MonoBehaviour
     [SerializeField]
     private Color[] colors;
 
-    public float timeInterval; // debug
-    private float timer;    //debug
-
     private Tile currentTile = null;
 
     private void Start() 
@@ -21,18 +18,7 @@ public class TileController : MonoBehaviour
         if(instance == null)
             instance = this;
 
-        //timer = timeInterval;
         SpawnShape();
-    }
-
-    private void Update()
-    {   
-        // timer += Time.deltaTime;
-        // if(timer > timeInterval)
-        // {
-        //     SpawnShape();
-        //     timer = 0;
-        // }
     }
     
     private void SpawnShape()

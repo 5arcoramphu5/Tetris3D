@@ -81,6 +81,18 @@ public class GridController : MonoBehaviour
 
     }
 
+    public static Vector3Int RotateRoundToInt(Quaternion rotation, Vector3Int vector)
+    {
+        Vector3 newVector = rotation * vector;
+        return new Vector3Int(Mathf.RoundToInt(newVector.x), Mathf.RoundToInt(newVector.y), Mathf.RoundToInt(newVector.z));
+    }
+
+    public static Vector2Int RotateRoundToInt(Quaternion rotation, Vector2Int vector)
+    {
+        Vector2 newVector = rotation * (Vector2)vector;
+        return new Vector2Int(Mathf.RoundToInt(newVector.x), Mathf.RoundToInt(newVector.y));
+    }
+
     #if UNITY_EDITOR
     private void OnDrawGizmos()
     {

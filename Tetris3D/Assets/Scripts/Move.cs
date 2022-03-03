@@ -150,8 +150,7 @@ public class Move
 
     private static Vector3Int Rotate(Vector3Int vector)
     {
-        Vector3 newVector = Quaternion.Euler(0, 90, 0) * vector;
-        return new Vector3Int(Mathf.RoundToInt(newVector.x), Mathf.RoundToInt(newVector.y), Mathf.RoundToInt(newVector.z));
+        return GridController.RotateRoundToInt(Quaternion.Euler(0, 90, 0), vector);
     }
 
     private static Vector3Int Flip(Vector3Int vector)

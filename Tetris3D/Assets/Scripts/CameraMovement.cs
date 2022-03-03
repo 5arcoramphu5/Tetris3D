@@ -11,14 +11,14 @@ public class CameraMovement : MonoBehaviour
     public static Vector2Int localRight = Vector2Int.right;
 
     private bool isRotating = false;
-    private Vector3 initialVectorToCenter;
+    private Vector3 initialVectorFromCenter;
     private int targetRotation = 0;
     private float currRotation = 0;
     private bool isRotationRight;
 
     private void Awake()
     {
-        initialVectorToCenter = centerObject.position - transform.position;
+        initialVectorFromCenter = transform.position - centerObject.position;
         transform.LookAt(centerObject);
     }
 
@@ -37,26 +37,24 @@ public class CameraMovement : MonoBehaviour
     private void Rotate()
     {
         currRotation += (isRotationRight ? -1 : 1) * rotationSpeed * Time.deltaTime;
+
         if(isRotationRight ? (currRotation <= targetRotation) : (currRotation >= targetRotation))
             EndRotation();
 
-        transform.position = Quaternion.Euler(0, currRotation, 0) * initialVectorToCenter + centerObject.position;
+        transform.position = Quaternion.Euler(0, currRotation, 0) * initialVectorFromCenter + centerObject.position;
         transform.LookAt(centerObject);
+        
     }
 
     private void EndRotation()
     {
+        targetRotation = targetRotation % 360;
         currRotation = targetRotation;
         isRotating = false;
 
-        Quaternion rotation = Quaternion.Euler(0, 0, targetRotation);
-        Vector2 rotForw = rotation * Vector2.up;
-        Vector2 rotRight = rotation * Vector2.right;
-        //todo
-        localForward = new Vector2Int(Mathf.RoundToInt(rotForw.x), Mathf.RoundToInt(rotForw.y));
-        localRight = new Vector2Int(Mathf.RoundToInt(rotRight.x), Mathf.RoundToInt(rotRight.y));
-        Debug.DrawLine(transform.position, transform.position + new Vector3(localRight.x, 0, localRight.y) * 10, Color.yellow, 1f);
-        Debug.DrawLine(transform.position, transform.position + new Vector3(localForward.x, 0, localForward.y) * 10, Color.yellow, 1f);
+        Quaternion rotation = Quaternion.Euler(0, 0, -targetRotation);
+        localForward = GridController.RotateRoundToInt(rotation, Vector2Int.up);
+        localRight = GridController.RotateRoundToInt(rotation, Vector2Int.right);
     }
 
     private void StartRotation(bool right)
@@ -64,6 +62,5 @@ public class CameraMovement : MonoBehaviour
         isRotating = true;
         isRotationRight = right;
         targetRotation += right ? -90 : 90;
-        targetRotation = targetRotation % 360;
     }
 }
