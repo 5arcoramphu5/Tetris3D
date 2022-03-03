@@ -64,13 +64,8 @@ public class GridController : MonoBehaviour
 
     public void FilledRowAction(int index)
     {
-        if(index == size.y - 1)
-            GameManager.GameOver();
-        else
-        {
-            for(int i = index + 1; i < size.y; i++)
-                Row.Move(rows[i], rows[i-1]);    
-        }
+        for(int i = index + 1; i < size.y; i++)
+            Row.Move(rows[i], rows[i-1]);    
     }
 
     public static void FillTileSpace(Tile tile)
@@ -79,11 +74,14 @@ public class GridController : MonoBehaviour
         foreach(TileSegment segment in tile.segments)
         {
             Vector3Int position = tile.centerGridPosition + segment.localPosition;
-            if(position.y >= 0 && position.y < instance.size.y)
+            if(position.y >= instance.size.y)
             {
-                instance.rows[position.y].Fill(position.x, position.z, segment.transform);
-                filledRows.Add(position.y);
+                GameManager.GameOver();
+                return;
             }
+            
+            instance.rows[position.y].Fill(position.x, position.z, segment.transform);
+            filledRows.Add(position.y);
         }
 
         foreach(int index in filledRows)

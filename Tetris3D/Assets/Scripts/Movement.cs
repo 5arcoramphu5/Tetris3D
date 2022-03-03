@@ -6,6 +6,7 @@ public class Movement : MonoBehaviour
 {
     public float fallingSpeed;
     public float fastFallingSpeed;
+    public float smoothRotationSpeed;
     [SerializeField]
     private float minTimeBetweenMoves;
 

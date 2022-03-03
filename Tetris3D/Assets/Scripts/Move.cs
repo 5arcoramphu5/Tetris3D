@@ -114,10 +114,7 @@ public class Move
             gridTranslation.z = Ztransl;
 
             if(rotation != Vector3.zero)
-            {
-                foreach(TileSegment segment in tile.segments)
-                    segment.UpdatePosition( Rotate(segment.localPosition) );
-            }
+                Movement.instance.StartCoroutine(RotateSmoothly());
         }
 
         if(vertical && verticalOnGrid)
@@ -131,6 +128,22 @@ public class Move
             tileTranslation.y = -(fastFall ? Movement.instance.fastFallingSpeed : Movement.instance.fallingSpeed) * Time.deltaTime;
 
         tile.transform.Translate(tileTranslation);
+    }
+
+    IEnumerator RotateSmoothly()
+    {
+        Quaternion target = Quaternion.Euler(rotation);
+        float t = 0;
+        while(t < 1)
+        {
+            t += Movement.instance.smoothRotationSpeed * Time.deltaTime;
+            tile.transform.rotation = Quaternion.SlerpUnclamped(Quaternion.identity, target, t);
+            yield return null;
+        }
+
+        tile.transform.rotation = Quaternion.identity;
+        foreach(TileSegment segment in tile.segments)
+            segment.UpdatePosition( Rotate(segment.localPosition) );
     }
 
     private Vector3Int Rotate(Vector3Int vector)
