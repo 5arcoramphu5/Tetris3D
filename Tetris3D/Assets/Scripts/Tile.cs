@@ -23,30 +23,30 @@ public class Tile : MonoBehaviour
 
     private void handleMovement()
     {
-        Move gridMovement = new Move(this);
+        Move gridMove = new Move(this);
 
         if(Input.GetKey(KeyCode.UpArrow))   
-            gridMovement.Add(0, 1);
+            gridMove.Add(CameraMovement.localForward);
 
         if(Input.GetKey(KeyCode.DownArrow))  
-            gridMovement.Add(0, -1);
+            gridMove.Add(-CameraMovement.localForward);
 
         if(Input.GetKey(KeyCode.RightArrow)) 
-            gridMovement.Add(1, 0);
+            gridMove.Add(CameraMovement.localRight);
 
         if(Input.GetKey(KeyCode.LeftArrow))  
-            gridMovement.Add(-1, 0);
+            gridMove.Add(-CameraMovement.localRight);
 
         if(Input.GetKeyDown(KeyCode.X))
-            gridMovement.AddRotatation();
+            gridMove.AddRotatation();
 
         if(Input.GetKeyDown(KeyCode.Z))
-            gridMovement.AddFlip();
+            gridMove.AddFlip();
 
         if(Input.GetKey(KeyCode.Space))
-            gridMovement.FastFall();
+            gridMove.FastFall();
 
-        Movement.TryToMove(gridMovement);
+        Movement.TryToMove(gridMove);
     }
 
     public void ChangeColor(Color c)

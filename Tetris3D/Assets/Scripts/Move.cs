@@ -46,10 +46,10 @@ public class Move
         verticalOnGrid =  GridController.worldSpaceYToGrid(y) < tile.centerGridPosition.y;
     }
 
-    public void Add(int x, int z)
+    public void Add(Vector2Int translation)
     {
-        Xtransl += x;
-        Ztransl += z;
+        Xtransl += translation.x;
+        Ztransl += translation.y;
         horizontal = true;
     }
 

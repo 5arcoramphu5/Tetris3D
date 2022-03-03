@@ -22,7 +22,7 @@ public class GridController : MonoBehaviour
         if(instance == null)
             instance = this;
 
-        coordStart = new Vector3(-size.x/2, -size.y/2, 0) * spacing;
+        coordStart = -(Vector3)size/2 * spacing;
         topCenter = new Vector3Int(size.x/2, size.y-1 , size.z/2);
 
         rows = new Row[size.y];
@@ -81,11 +81,11 @@ public class GridController : MonoBehaviour
 
     }
 
+    #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        #if UNITY_EDITOR
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(transform.position, (Vector3)size*spacing);
-        #endif
     }
+    #endif
 }

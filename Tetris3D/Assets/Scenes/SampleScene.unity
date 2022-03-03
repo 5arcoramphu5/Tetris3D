@@ -256,6 +256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   centerObject: {fileID: 1504150968}
+  rotationSpeed: 270
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -307,7 +308,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0.38268343, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: -15, y: 0, z: -15}
+  m_LocalPosition: {x: -11, y: 0, z: -18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -427,7 +428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca72705d8242bdf40859e5d3ede2f224, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: {x: 4, y: 10, z: 4}
+  size: {x: 10, y: 20, z: 10}
   spacing: 1.1
   linePrefab: {fileID: 3971007180078568811, guid: 100f2904431bb994eae154296d1cc7f9, type: 3}
   topCenter: {x: 0, y: 0, z: 0}
