@@ -52,9 +52,12 @@ public class Tile : MonoBehaviour
     public void ChangeColor(Color c)
     {
         MeshRenderer[] childrenRends = transform.GetComponentsInChildren<MeshRenderer>();
+        if(childrenRends.Length == 0)
+            return;
+            
+        Material newMaterial = new Material(childrenRends[0].material);
         for(int i = 0; i< childrenRends.Length; ++i)
         {
-            Material newMaterial = new Material(childrenRends[i].material);
             newMaterial.color = c;
             childrenRends[i].material = newMaterial;
         }

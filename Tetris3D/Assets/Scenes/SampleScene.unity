@@ -256,7 +256,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   centerObject: {fileID: 1504150968}
-  rotationSpeed: 270
+  horizontalRotationSpeed: 270
+  verticalRotationSpeed: 50
+  initialVectorFromCenter: {x: -18, y: 0, z: -18}
+  maxVerticalOffset: 20
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -348,6 +351,8 @@ MonoBehaviour:
   - {fileID: 8960536789548469900, guid: 345fed02aff4a7c458c697a60051321b, type: 3}
   - {fileID: 3680631273963637413, guid: d876c03d00531c24d96700b8b5114ce4, type: 3}
   - {fileID: 4715307051920218464, guid: 1007ac916e339e7419e261d522febff5, type: 3}
+  - {fileID: 8960536789548469900, guid: bb41c69c5875ebe4cb26d3351d4c4a15, type: 3}
+  - {fileID: 8960536789548469900, guid: b622e1c544e480b47940688dc58d8a5d, type: 3}
   colors:
   - {r: 0.9, g: 0.09000002, b: 0.09000002, a: 1}
   - {r: 0.09000002, g: 0.9, b: 0.09000002, a: 1}
@@ -385,6 +390,7 @@ MonoBehaviour:
   fastFallingSpeed: 10
   smoothRotationSpeed: 5
   minTimeBetweenMoves: 0.1
+  freezed: 0
 --- !u!1 &1504150967
 GameObject:
   m_ObjectHideFlags: 0
@@ -431,6 +437,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   size: {x: 4, y: 15, z: 4}
   spacing: 1.1
+  rowsFallingSpeed: 3
   topCenter: {x: 0, y: 0, z: 0}
   coordStart: {x: 0, y: 0, z: 0}
 --- !u!114 &1504150970

@@ -5,62 +5,100 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
     public Transform centerObject;
-    public float rotationSpeed;
+    public float horizontalRotationSpeed;
+    public float verticalRotationSpeed;
+    public Vector3 initialVectorFromCenter;
+    public float maxVerticalOffset;
 
     public static Vector2Int localForward = Vector2Int.up;
     public static Vector2Int localRight = Vector2Int.right;
 
-    private bool isRotating = false;
-    private Vector3 initialVectorFromCenter;
-    private int targetRotation = 0;
-    private float currRotation = 0;
-    private bool isRotationRight;
+    private Vector3 currentPosition = Vector3.zero;
+    private float currentYPositionOffset = 0;
+    private int targetHorizontalRotation = 0;
 
     private void Awake()
     {
-        initialVectorFromCenter = transform.position - centerObject.position;
-        transform.LookAt(centerObject);
+        currentPosition = centerObject.position + initialVectorFromCenter;
+        ApplyPositionChanges();
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.N))
-            StartRotation(false);
-        
-        if(Input.GetKeyDown(KeyCode.M))
-            StartRotation(true);
+        if(Input.GetKeyDown(KeyCode.D))
+            StartCoroutine( RotateHorizontally(true) );
 
-        if(isRotating)
-            Rotate();
+        if(Input.GetKeyDown(KeyCode.A))
+            StartCoroutine( RotateHorizontally(false) );
+
+        if(Input.GetKey(KeyCode.W))
+            RotateVertically(true);
+            
+        if(Input.GetKey(KeyCode.S))
+            RotateVertically(false);
     }
 
-    private void Rotate()
+    void RotateVertically(bool up)
     {
-        currRotation += (isRotationRight ? -1 : 1) * rotationSpeed * Time.deltaTime;
+        currentYPositionOffset += (up ? 1 : -1) * Time.deltaTime * verticalRotationSpeed;
 
-        if(isRotationRight ? (currRotation <= targetRotation) : (currRotation >= targetRotation))
-            EndRotation();
+        if(up)
+        {
+            if(currentYPositionOffset > maxVerticalOffset)
+                currentYPositionOffset = maxVerticalOffset;
+        }
+        else
+        {
+            if(currentYPositionOffset < -maxVerticalOffset)
+                currentYPositionOffset = -maxVerticalOffset;
+        }
 
-        transform.position = Quaternion.Euler(0, currRotation, 0) * initialVectorFromCenter + centerObject.position;
-        transform.LookAt(centerObject);
-        
+        ApplyPositionChanges();
     }
 
-    private void EndRotation()
+    IEnumerator RotateHorizontally(bool right)
     {
-        targetRotation = targetRotation % 360;
-        currRotation = targetRotation;
-        isRotating = false;
+        float newRotation = targetHorizontalRotation;
+        targetHorizontalRotation += right ? -90 : 90;
 
-        Quaternion rotation = Quaternion.Euler(0, 0, -targetRotation);
+        while(true)
+        {
+            newRotation += (right ? -1 : 1) * horizontalRotationSpeed * Time.deltaTime;
+
+            if(right ? (newRotation <= targetHorizontalRotation) : (newRotation >= targetHorizontalRotation))
+                break;
+
+            SetYRotation(newRotation);
+            yield return null;
+        }
+
+        targetHorizontalRotation = targetHorizontalRotation % 360;
+
+        Quaternion rotation = Quaternion.Euler(0, 0, -targetHorizontalRotation);
         localForward = GridController.RotateRoundToInt(rotation, Vector2Int.up);
         localRight = GridController.RotateRoundToInt(rotation, Vector2Int.right);
+
+        SetYRotation(targetHorizontalRotation);
     }
 
-    private void StartRotation(bool right)
+    private void SetYRotation(float rotation)
     {
-        isRotating = true;
-        isRotationRight = right;
-        targetRotation += right ? -90 : 90;
+        currentPosition = Quaternion.Euler(0, rotation, 0) * initialVectorFromCenter + centerObject.position;
+        ApplyPositionChanges();
     }
+
+    private void ApplyPositionChanges()
+    {
+        transform.position = currentPosition + Vector3.up * currentYPositionOffset;
+        transform.LookAt(centerObject);
+    }
+
+    #if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(centerObject.position, centerObject.position + initialVectorFromCenter);
+        Gizmos.DrawSphere(centerObject.position + initialVectorFromCenter, 0.1f);
+    }
+    #endif
 }
