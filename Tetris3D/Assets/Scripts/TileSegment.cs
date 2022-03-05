@@ -6,7 +6,7 @@ public class TileSegment : MonoBehaviour
 {
     public Vector3Int localPosition;
 
-    private void Awake() 
+    private void Start() 
     {
         UpdatePosition();
     } 

@@ -6,32 +6,36 @@ public class TileController : MonoBehaviour
 {
     public static TileController instance = null;
 
+    public UIManager uiManager;
+
     [SerializeField]
     private GameObject[] shapes;
     [SerializeField]
     private Color[] colors;
 
+    private GameObject nextShape;
     private Tile currentTile = null;
 
     private void Start() 
     {
         instance = this;
 
+        nextShape = shapes[Random.Range(0, shapes.Length)];
         SpawnShape();
     }
     
     private void SpawnShape()
     {
-        GameObject shape = shapes[Random.Range(0, shapes.Length)];
+        GameObject shapeObject = Instantiate(nextShape, transform);
         Color color = colors[Random.Range(0, colors.Length)];
+        Tile tile = shapeObject.AddComponent<Tile>();
 
-        GameObject shapeObject = Instantiate(shape, transform);
-        Tile tile = shapeObject.GetComponent<Tile>();
         shapeObject.name = "Tile";
-
         tile.ChangeColor(color);
-
         currentTile = tile;
+
+        nextShape = shapes[Random.Range(0, shapes.Length)];
+        uiManager.DisplayNextShape(nextShape);
     }
 
     public static void TileLanded()
