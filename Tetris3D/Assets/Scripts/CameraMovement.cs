@@ -6,21 +6,22 @@ public class CameraMovement : MonoBehaviour
 {
     public Transform centerObject;
     public float horizontalRotationSpeed;
-    public float verticalRotationSpeed;
-    public Vector3 initialVectorFromCenter;
+    public float verticalMovementSpeed;
     public float maxVerticalOffset;
 
     public static Vector2Int localForward = Vector2Int.up;
     public static Vector2Int localRight = Vector2Int.right;
 
-    private Vector3 currentPosition = Vector3.zero;
+    private Vector3 initialVectorFromCenter;
+    private Vector3 currentPosition;
     private float currentYPositionOffset = 0;
     private int targetHorizontalRotation = 0;
 
     private void Awake()
     {
-        currentPosition = centerObject.position + initialVectorFromCenter;
-        ApplyPositionChanges();
+        initialVectorFromCenter = transform.position - centerObject.position;
+        currentPosition = transform.position;
+        transform.LookAt(centerObject);
     }
 
     private void Update()
@@ -40,7 +41,7 @@ public class CameraMovement : MonoBehaviour
 
     void RotateVertically(bool up)
     {
-        currentYPositionOffset += (up ? 1 : -1) * Time.deltaTime * verticalRotationSpeed;
+        currentYPositionOffset += (up ? 1 : -1) * Time.deltaTime * verticalMovementSpeed;
 
         if(up)
         {
@@ -92,13 +93,4 @@ public class CameraMovement : MonoBehaviour
         transform.position = currentPosition + Vector3.up * currentYPositionOffset;
         transform.LookAt(centerObject);
     }
-
-    #if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(centerObject.position, centerObject.position + initialVectorFromCenter);
-        Gizmos.DrawSphere(centerObject.position + initialVectorFromCenter, 0.1f);
-    }
-    #endif
 }

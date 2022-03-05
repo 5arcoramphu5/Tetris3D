@@ -15,8 +15,7 @@ public class TileController : MonoBehaviour
 
     private void Start() 
     {
-        if(instance == null)
-            instance = this;
+        instance = this;
 
         SpawnShape();
     }
@@ -38,7 +37,10 @@ public class TileController : MonoBehaviour
     public static void TileLanded()
     {
         GridController.FillTileSpace(instance.currentTile);
+        GameManager.AddPoints(4);
         instance.currentTile.Deactivate();
-        instance.SpawnShape();
+        
+        if(!GameManager.gameOver) 
+            instance.SpawnShape();
     }
 }

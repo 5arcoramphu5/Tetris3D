@@ -19,8 +19,7 @@ public class GridController : MonoBehaviour
 
     private void Awake() 
     {
-        if(instance == null)
-            instance = this;
+        instance = this;
 
         coordStart = -(Vector3)size/2 * spacing;
         topCenter = new Vector3Int(size.x/2, size.y-1 , size.z/2);

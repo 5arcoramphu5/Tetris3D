@@ -36,7 +36,7 @@ public class Row : MonoBehaviour
     public void CheckIfFilled()
     {
         if(leftToFill <= 0)
-            gc.DeleteRow(index);
+            GameManager.FullRow(index);
     }
 
     public void MoveDown()

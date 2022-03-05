@@ -8,17 +8,21 @@ public class Movement : MonoBehaviour
     public float fastFallingSpeed;
     public float smoothRotationSpeed;
     [SerializeField]
+    private float speedUpDelta;
+    [SerializeField]
+    private int amountOfRowsToSpeedUp;
+    [SerializeField]
     private float minTimeBetweenMoves;
 
     public static Movement instance;
     private float timer;
     [HideInInspector]
     public bool freezed = false;
+    private int rowsCounter = 0;
 
     private void Awake() 
     {
-        if(instance == null)
-            instance = this;
+        instance = this;
         
         timer = minTimeBetweenMoves;
     }
@@ -85,5 +89,21 @@ public class Movement : MonoBehaviour
                 return false;
         }
         return true;
+    }
+
+    public static void CheckSpeedUp()
+    {
+        instance.rowsCounter++;
+        if(instance.rowsCounter == instance.amountOfRowsToSpeedUp)
+        {
+            instance.rowsCounter = 0;
+            instance.SpeedUp();
+        }
+    }
+
+    private void SpeedUp()
+    {
+        fallingSpeed *= speedUpDelta;
+        fastFallingSpeed *= speedUpDelta;
     }
 }
