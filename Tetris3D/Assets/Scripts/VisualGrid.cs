@@ -29,7 +29,7 @@ public class VisualGrid : MonoBehaviour
             positions[3] = new Vector3(0, i, gc.size.z);
 
             for(int j = 0; j < 4; ++j) 
-                positions[j] *= gc.spacing;
+                positions[j] *= gc.spacing; 
 
             lineRend.positionCount = 4;
             lineRend.SetPositions(positions);

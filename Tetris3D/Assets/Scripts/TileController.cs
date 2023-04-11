@@ -12,6 +12,7 @@ public class TileController : MonoBehaviour
     private GameObject[] shapes;
     [SerializeField]
     private Color[] colors;
+    private int currColor = 0;
 
     private GameObject nextShape;
     private Tile currentTile = null;
@@ -27,7 +28,10 @@ public class TileController : MonoBehaviour
     private void SpawnShape()
     {
         GameObject shapeObject = Instantiate(nextShape, transform);
-        Color color = colors[Random.Range(0, colors.Length)];
+        if(currColor == colors.Length - 1)
+            currColor = 0;
+        else currColor++;
+        Color color = colors[currColor];
         Tile tile = shapeObject.AddComponent<Tile>();
 
         shapeObject.name = "Tile";
