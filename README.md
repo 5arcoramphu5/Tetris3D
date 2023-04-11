@@ -1,15 +1,10 @@
 # **Tetris 3D**
 
-<video 
-src="video.mp4" 
-controls
-autoplay
-loop>
-</video>
-
 ## Description
 
 3D version of the classic Tetris game. Project made in Unity3D, written in C#. 
+
+https://user-images.githubusercontent.com/74541183/231182320-ae690d2f-5583-46c2-a4cb-2d1703bc601a.mp4
 
 ## Usage
 
